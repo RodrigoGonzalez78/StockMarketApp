@@ -22,9 +22,9 @@ import javax.inject.Singleton
 
 @Singleton
 class StrockRepositoryImpl @Inject constructor(
-    val api: StockApi,
-    val db: StockDatabase,
-    val companyListingsParser: CVSParser<CompanyListing>
+   private val api: StockApi,
+   private val db: StockDatabase,
+   private val companyListingsParser: CVSParser<CompanyListing>
 ) : StockRepository {
 
     private var dao = db.dao
