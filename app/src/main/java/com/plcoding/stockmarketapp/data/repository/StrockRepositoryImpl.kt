@@ -6,10 +6,13 @@ import com.opencsv.CSVReader
 import com.plcoding.stockmarketapp.data.csv.CVSParser
 import com.plcoding.stockmarketapp.data.csv.CompanyListingsParser
 import com.plcoding.stockmarketapp.data.local.StockDatabase
+import com.plcoding.stockmarketapp.data.mapper.toCompanyInfo
 import com.plcoding.stockmarketapp.data.mapper.toCompanyListing
 import com.plcoding.stockmarketapp.data.mapper.toCompanyListingEntity
 import com.plcoding.stockmarketapp.data.remote.StockApi
+import com.plcoding.stockmarketapp.domain.model.CompanyInfo
 import com.plcoding.stockmarketapp.domain.model.CompanyListing
+import com.plcoding.stockmarketapp.domain.model.IntradayInfo
 import com.plcoding.stockmarketapp.domain.repository.StockRepository
 import com.plcoding.stockmarketapp.utils.Resource
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +27,8 @@ import javax.inject.Singleton
 class StrockRepositoryImpl @Inject constructor(
    private val api: StockApi,
    private val db: StockDatabase,
-   private val companyListingsParser: CVSParser<CompanyListing>
+   private val companyListingsParser: CVSParser<CompanyListing>,
+   private val intradayInfoParser: CVSParser<IntradayInfo>
 ) : StockRepository {
 
     private var dao = db.dao
@@ -80,6 +84,45 @@ class StrockRepositoryImpl @Inject constructor(
                 )
                 emit(Resource.Loanding(false))
             }
+        }
+    }
+
+    override suspend fun getIntradayInfo(symbol: String): Resource<List<IntradayInfo>> {
+        return try {
+            val respnse= api.getIntradayInfo(symbol)
+            val result= intradayInfoParser.parse(respnse.byteStream())
+            Resource.Success(result)
+
+        }catch (e: IOException){
+            e.printStackTrace()
+            Resource.Error(
+                message = "No se puedo cagar la informacion del dia"
+            )
+        }catch (e : HttpException){
+            e.printStackTrace()
+            Resource.Error(
+                message = "No se puedo cagar la informacion del dia"
+            )
+        }
+
+
+    }
+
+    override suspend fun getCompanyInfo(symbol: String): Resource<CompanyInfo> {
+        return try {
+           val result= api.getCompanyInfo(symbol)
+            Resource.Success(result.toCompanyInfo())
+
+        }catch (e: IOException){
+            e.printStackTrace()
+            Resource.Error(
+                message = "No se puedo cagar la informacion de la compania"
+            )
+        }catch (e : HttpException){
+            e.printStackTrace()
+            Resource.Error(
+                message = "No se puedo cagar la informacion de la compania"
+            )
         }
     }
 
