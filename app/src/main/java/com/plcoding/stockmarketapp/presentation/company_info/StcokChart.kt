@@ -2,33 +2,21 @@ package com.plcoding.stockmarketapp.presentation.company_info
 
 
 import android.graphics.Paint
-
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-
-
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.asComposePath
+import  androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
-
-
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 import com.plcoding.stockmarketapp.domain.model.IntradayInfo
-
-
 import kotlin.math.round
 import kotlin.math.roundToInt
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -94,7 +82,7 @@ fun StockChart(
         var lastX = 0f
         val strokePath = Path.apply {
             val height = size.height
-
+                moveTO
             for (i in infos.indices) {
                 val info = infos[i]
                 val nexInfo = infos.getOrNull(i + 1) ?: infos.last()
@@ -106,10 +94,9 @@ fun StockChart(
                 val x2 = spacing + (i + 1) * spacePerHour
                 val y2 = height - spacing - (rightRatio * height).toFloat()
                 if (i == 0) {
-                    moveTo(
-                        x1,
-                        y1,
-                    )
+
+                    m
+                    moveTo(x1, y1)
                 }
                 lastX=(x1+x2)/2f
                 quadraticBezierTo(
