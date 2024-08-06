@@ -80,9 +80,9 @@ fun StockChart(
             }
         }
         var lastX = 0f
-        val strokePath = Path.apply {
+        val strokePath = Path().apply {
             val height = size.height
-                moveTO
+
             for (i in infos.indices) {
                 val info = infos[i]
                 val nexInfo = infos.getOrNull(i + 1) ?: infos.last()
@@ -95,7 +95,6 @@ fun StockChart(
                 val y2 = height - spacing - (rightRatio * height).toFloat()
                 if (i == 0) {
 
-                    m
                     moveTo(x1, y1)
                 }
                 lastX=(x1+x2)/2f
@@ -122,7 +121,7 @@ fun StockChart(
                     transparentGraphColor,
                     Color.Transparent,
 
-                ),
+                    ),
                 endY = size.height-spacing
 
             )
@@ -131,9 +130,9 @@ fun StockChart(
         drawPath(
             path = strokePath,
             color = graphColor,
-            style = Stoke(
+            style = Stroke(
                 width=3.dp.toPx(),
-                cap= Stroke.Round
+                cap= StrokeCap.Round
             )
         )
     }
